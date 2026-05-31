@@ -132,6 +132,8 @@ function isAuthenticated(req, res, next) {
     "/login.html",
     "/verify-otp",
     "/setup-2fa",
+    "/login-upstox",
+    "/callback",
     "/webhook"
   ];
 
@@ -150,6 +152,11 @@ app.use(isAuthenticated);
 // ✅ Allow dashboard page to load always
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
+});
+
+// alias for dashboard URL
+app.get("/dashboard.html", (req, res) => {
+  res.redirect("/");
 });
 
 // (optional but fine)

@@ -43,7 +43,8 @@ async function callback(req, res) {
 
     console.log("✅ Token Generated & Saved");
 
-    res.send("✅ Login Successful!");
+    // Redirect back to the dashboard after successful Upstox login
+    res.redirect("/");
 
   } catch (err) {
     console.error("❌ Token Error:", err.response?.data);
