@@ -1,9 +1,9 @@
 const axios = require("axios");
-const { getAccessToken } = require("./tokenManager");
+const { getValidAccessToken } = require("./tokenManager");
 
 async function getProfile() {
   try {
-    const token = getAccessToken();
+    const token = await getValidAccessToken();
 
     const res = await axios.get(
       "https://api.upstox.com/v2/user/profile",
