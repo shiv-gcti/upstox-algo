@@ -1,0 +1,84 @@
+<h2>Login</h2>
+
+<div id="loginForm">
+  <input id="username" placeholder="Username" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="otpForm" style="display:none;">
+  <input id="otp" placeholder="Enter OTP" />
+  <button onclick="verifyOtp()">Verify OTP</button>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // ✅ validation
+  if (!username || !password) {
+    alert("Please enter username and password");
+    return;
+  }
+
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
+
+  // ❌ handle wrong credentials
+  if (!res.ok) {
+    alert("Invalid credentials");
+    return;
+  }
+
+  // ✅ safe JSON parsing
+  let data;
+  try {
+    data = await res.json();
+  } catch (e) {
+    alert("Server error");
+    return;
+  }
+
+  if (data.step === "otp") {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("otpForm").style.display = "block";
+  }
+}
+
+async function verifyOtp() {
+  const token = document.getElementById("otp").value;
+
+  if (!token) {
+    alert("Please enter OTP");
+    return;
+  }
+
+  const res = await fetch("/verify-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token })
+  });
+
+  // ❌ handle invalid OTP
+  if (!res.ok) {
+    alert("Invalid OTP");
+    return;
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (e) {
+    alert("Server error");
+    return;
+  }
+
+  if (data.success) {
+    window.location.href = "/";
+  }
+}
+</script>
